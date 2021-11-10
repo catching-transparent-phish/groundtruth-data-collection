@@ -1,0 +1,32 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  vars:
+    http_port: 80
+    domain: longislandbanking.com
+    muraena_location: [PATH TO MURAENA tar.gz file]
+    cert_location: [PATH TO CERTIFICATE FILE]
+    priv_key_location: [PATH TO CERTIFICATE PRIVATE KEY]
+    ca_root_cert_location: [PATH TO CERTIFICATE CA ROOT LOCATION]
+
+  tasks:
+
+    - name: copy muraena directory zipped file
+      copy: src={{ muraena_location }} dest=/muraena.tar.gz force=no
+
+    - name: Decompress muraena directory
+      unarchive:
+          src=/muraena.tar.gz
+          dest=/muraena
+          remote_src=true
+
+    - name: Copy certificate to node
+      copy: src={{ cert_location }} dest=/
+
+    - name: Copy private key to node
+      copy: src={{ priv_key_location }} dest=/
+
+    - name: Copy root certificate to node
+      copy: src={{ ca_root_cert_location }} dest=/

@@ -1,0 +1,8 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+    - name: start evilginx
+      shell: screen -d -m /evilginx/evilginx -p /evilginx/phishlets

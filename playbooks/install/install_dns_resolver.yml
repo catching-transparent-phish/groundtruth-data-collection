@@ -1,0 +1,36 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+
+    - name: install python2.7
+      apt: name=python update_cache=yes state=latest
+
+    - name: install resolvconf
+      apt: name=resolvconf update_cache=no state=latest
+
+    - name: append to resolvconf file
+      blockinfile:
+          path: /etc/resolvconf/resolv.conf.d/head
+          block: |
+              nameserver 127.0.0.54
+
+    - name: restart resolvconf service to apply changes
+      service:
+          name: resolvconf.service
+          state: restarted
+
+    - name: copy hosts file
+      copy: src=inputFiles/hostsFile dest=/hosts force=no
+
+    - name: copy DNS proxy script
+      copy: src=inputFiles/dnsProxy.py dest=/dnsProxy.py force=no
+
+    - name: start DNS proxy in background
+      shell: nohup python /dnsProxy.py -f /hosts -s 8.8.8.8 -H 127.0.0.54 &
+
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted

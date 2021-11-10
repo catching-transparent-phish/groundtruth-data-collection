@@ -1,0 +1,23 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+
+    - name: install packages
+      apt: name=python3-pip update_cache=no state=latest
+
+    - name: clone phoca repo
+      git:
+          repo: https://github.com/catching-transparent-phish/phoca.git
+          dest: /phoca
+          clone: yes
+          update: yes
+
+    - name: Install pip requirements from file
+      pip: 
+        requirements: /phoca/requirements.txt
+
+    - name: copy urls file
+      copy: src=inputFiles/crawlerURLs.csv dest=/crawlerURLs.csv force=no

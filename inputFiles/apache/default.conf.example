@@ -1,0 +1,18 @@
+<VirtualHost *:80>
+    ServerName example.com
+    ServerAlias *.example.com
+	
+    ServerAdmin webmaster@localhost
+	DocumentRoot /var/www/html/
+
+	#LogLevel info ssl:warn
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    RewriteEngine on
+    RewriteCond %{SERVER_NAME} =www.example.com [OR]
+    RewriteCond %{SERVER_NAME} =example.com
+    RewriteCond %{HTTP_HOST} example.com [NC]
+    RewriteCond %{SERVER_PORT} 80
+</VirtualHost>

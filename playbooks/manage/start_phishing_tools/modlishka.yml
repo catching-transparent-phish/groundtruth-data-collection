@@ -1,0 +1,11 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  vars:
+      template_file: [NAME OF MODLISHKA TEMPLATE FILE TO USE]
+
+  tasks:
+    - name: start Modlishka
+      shell: screen -d -m /modlishka/dist/proxy -config /modlishka/templates/{{ template_file }}

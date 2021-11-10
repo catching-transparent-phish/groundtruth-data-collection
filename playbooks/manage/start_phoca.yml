@@ -1,0 +1,11 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+
+    - name: Start phoca
+      shell: 
+        cmd: nohup ./phoca -r ../crawlerURLs.csv -w ../crawlerResults.csv --http-port 8080 --https-port 8443 > /output.log 2>&1 & 
+        chdir: /phoca/

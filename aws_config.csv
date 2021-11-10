@@ -1,0 +1,2 @@
+instance_name,region,blueprint_id,bundle_id,keypair_name,tags,tcp_ports,udp_ports
+mitm-phishing-node,us-east-1,ubuntu_18_04,micro_2_0,2fa_phishing,"mitm-phishing:","22,80,443,8080,8443",

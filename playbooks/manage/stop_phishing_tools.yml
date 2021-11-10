@@ -1,0 +1,17 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+    - name: stop evilginx
+      shell: killall evilginx
+      ignore_errors: yes
+
+    - name: stop Muraena
+      shell: killall muraena
+      ignore_errors: yes
+
+    - name: stop Modlishka
+      shell: killall proxy
+      ignore_errors: yes

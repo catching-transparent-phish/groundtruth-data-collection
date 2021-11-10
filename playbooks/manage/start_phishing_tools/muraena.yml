@@ -1,0 +1,11 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  vars:
+      template_file: [NAME OF MURAENA TEMPLATE FILE TO USE]
+
+  tasks:
+    - name: start Muraena
+      shell: screen -d -m /muraena/muraena -config /muraena/config/{{ template_file }}

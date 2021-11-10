@@ -1,0 +1,13 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+
+    - name: Get output file
+      fetch: 
+        src: /crawlerResults.csv
+        dest: ../crawlerResults/{{ node_name }}.csv
+        flat: yes
+      ignore_errors: yes

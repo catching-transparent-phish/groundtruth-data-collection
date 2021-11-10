@@ -1,0 +1,18 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  vars:
+    modlishka_location: [PATH TO MODLISHKA tar.gz file location]
+
+  tasks:
+
+    - name: copy modlishka directory zipped file
+      copy: src={{ modlishka_location }} dest=/modlishka.tar.gz force=no
+
+    - name: Decompress go directory
+      unarchive:
+          src=/modlishka.tar.gz
+          dest=/modlishka
+          remote_src=true

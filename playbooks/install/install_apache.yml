@@ -1,0 +1,63 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  vars:
+      #domain: [YOUR DOMAIN HERE]
+      #cert_path: [PATH TO YOUR CERTIFICATE FILE HERE]
+      #priv_key_path: [PATH TO YOUR PRIVATE KEY FILE HERE]
+      domain: example.com
+      cert_path: inputFiles/cert.pem
+      priv_key_path: inputFiles/privkey.pem
+
+  tasks:
+
+    - name: install packages
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: enabled mod_rewrite
+      apache2_module: name=rewrite state=present
+      notify:
+        - restart apache2
+
+    - name: enabled ssl
+      apache2_module: name=ssl state=present
+      notify:
+        - restart apache2
+
+    - name: copy http virtual host file
+      copy: src=inputFiles/apache/default.conf dest=/etc/apache2/sites-available/{{ domain }}.conf
+    
+    - name: copy https virtual host file
+      copy: src=inputFiles/apache/default-ssl.conf dest=/etc/apache2/sites-available/{{ domain }}-ssl.conf
+
+    - name: copy certificate file
+      copy: src={{ cert_path }} dest=/fullchain.pem
+    
+    - name: copy private key file
+      copy: src={{ priv_key_path }} dest=/privkey.pem
+
+    - name: copy let's encrypt config file
+      copy: src=inputFiles/apache/options-ssl-apache.conf dest=/options-ssl-apache.conf
+
+    - name: a2ensite {{ domain }}
+      command: a2ensite {{ domain }}
+      args:
+        creates: /etc/apache2/sites-enabled/{{ domain }}.conf
+      notify:
+        - restart apache2
+
+    - name: a2ensite {{ domain }}-ssl.conf
+      command: a2ensite {{ domain }}-ssl.conf
+      args:
+        creates: /etc/apache2/sites-enabled/{{ domain }}-ssl.conf
+      notify:
+        - restart apache2
+
+    - name: create basic html file
+      copy: src=inputFiles/apache/index.html dest=/var/www/html/index.html
+
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted

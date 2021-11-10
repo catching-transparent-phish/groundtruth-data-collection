@@ -1,0 +1,49 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+  vars:
+    evilginx_source_location: [PATH TO EVILGINX tar.gz file location]
+    evilginx_home_location: [PATH TO .evilginx tar.gz file location]
+    cert_location: [PATH TO CERTIFICATE FILE]
+    priv_key_location: [PATH TO CERTIFICATE PRIVATE KEY]
+    ca_root_cert_location: [PATH TO CERTIFICATE CA ROOT LOCATION]
+
+  tasks:
+
+    - name: copy evilginx directory zipped file
+      copy: src={{ evilginx_source_location }} dest=/evilginx.tar.gz force=no
+
+    - name: Decompress go directory
+      unarchive:
+          src=/evilginx.tar.gz
+          dest=/
+          remote_src=true
+
+    - name: copy evilginx root directory
+      copy: src={{ evilginx_home_location }} dest=/evilginxHomeDirectory force=no
+
+    - name: Decompress evilginx root home directory
+      unarchive:
+          src=/evilginxHomeDirectory.tar.gz
+          dest=/evilginxHomeDirectory
+          remote_src=true
+
+    - name: move evilginx root directory to proper place
+      shell: mv /evilginxHomeDirectory /root/.evilginx
+
+    - name: set the evilginx IP address to the current node's IP
+      replace:
+          path: /root/.evilginx/config.yaml
+          regexp: '^ip: .*$'
+          replace: 'ip: {{ inventory_hostname }}'
+
+    - name: Copy certificate to node
+      copy: src={{ cert_location }} dest=/
+
+    - name: Copy private key to node
+      copy: src={{ priv_key_location }} dest=/
+
+    - name: Copy root certificate to node
+      copy: src={{ ca_root_cert_location }} dest=/

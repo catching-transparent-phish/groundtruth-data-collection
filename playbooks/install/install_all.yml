@@ -1,0 +1,16 @@
+---
+- hosts: apache
+  remote_user: ubuntu
+  become: yes
+
+- name: Install apache2 on node
+  import_playbook: install_apache.yml
+
+- name: Install dnsProxy and hosts file
+  import_playbook: install_dns_resolver.yml
+
+- name: Install phoca
+  import_playbook: install_phoca.yml
+
+
+
